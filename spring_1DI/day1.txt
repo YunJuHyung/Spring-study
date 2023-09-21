@@ -1,0 +1,52 @@
+### Spring Tool Suite 4 (IDE) 버전을 설치
+
+File - New 메뉴 에서 선택하는 프로젝트 유형
+1. Maven Project : 기존 프로젝트 생성방식과 동일 Maven 빌드환경으로 만드는 프로젝트
+2. Dynamic Web Project : 웹애플리케이션 프로젝트 (Maven 적용되지 않은 상태)
+3. Spring Starter Project :  스프링 부트 프로젝트 
+- spring 프레임워크가 적용되기 위해 필요한 과정(설정)을 자동으로 지원하는 기능을 포함
+
+
+### day1 : Maven Project + spring 라이브러리 추가
+1) pom.xml 의존성 확인하기
+spring-context 추가 - 버전 5.2.22.RELEASE
+		spring-context 와 의존관계인 라이브러리는 알아서 추가
+		ㄴ spring-aop
+		ㄴ spring-beans
+		ㄴ spring-core
+		ㄴ spring-expression
+		ㄴ spring-jcl
+		
+2)폴더 구조
+* 애플리케이션의 프로덕트(산출물) 코드
+src/main/java
+src/main/resources (- 설정파일 xml 등등 포함)
+			ㄴ 로깅을 위한 설정파일 log4.xml
+			ㄴ META-INF : 메타 정보를 저장하는 폴더(마이바티스 설정파일 등등)
+* 테스트 코드
+src/test/java
+src/test/resources
+
+* target 폴더 : 빌드된 .class 가 저장되는 폴더
+
+3)소스 설명
+* org.iclass.java 패키지 코드: 기존 자바코드의 의존관계 객체 생성 방식
+* org.iclass.di 패키지 코드 : 스프링 의존성 Bean 주입 방식
+
+4)의존관계 자동 주입
+- 빈을 생성할 대상 패키지 설정 : BuyConfig.java => @Configuration, @ComponentScan
+- 스프링이 빈으로 만들 클래스 애노테이션 : @Component
+- 실행 목표 : Buy2Controller 의 buy 메소드 실행.
+- 첫번째 org.iclass.di 패키지에서 생성자 자동 주입을 했습니다. => 커스텀생성자
+			ㄴ 생성자 주입은 자동 주입 어노테이션 @Autowired 를 생략하고 작성안합니다.
+- 두번째 org.iclass.di2 패키지에서 setter 자동 주입을 했습니다. => 기본생성자 + setter
+			ㄴ setter 에 @Autowired 표기
+- 세번째 필드주입 : 스프링 권고 사항으로는 사용하지 않습니다. 테스트 코드에서만 사용합니다.
+			의존관계 변수 선언부에 @Autowired.
+** 확인할 것 : 커스텀 생성자로 자동주입 동작한 후, 만약 setter에 @Autowired 가 있다면  setter 주입을 또 합니다.
+
+** 자동 주입은 타입이 맞는 것을 주입하는 것입니다.(타입 기반)
+	스프링빈의 기본은 싱글톤입니다.
+	기본적인 빈의 이름을 바꿀 수 있습니다. 그 때 사용하는 방법은??
+	
+** 자동주입에서 의존관계 타입을 인터페이스로 많이 합니다.( -> 느슨한 결합)
