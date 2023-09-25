@@ -1,0 +1,41 @@
+
+#### spring web mvc 프로젝트 
+
+0. spring web mvc 프로젝트는 웹애플리케이션 개발이므로 WAS 서버를 추가해야 합니다.
+	의존성 추가
+	<!--spring web mvc-->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<!-- 웹 애플리케이션 : jsp 의 jstl 추가-->
+		<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+		
+		
+1. 프로젝트 생성하기
+
+1) File - New - Dynamic Web Project
+	ㄴ 첫번째 단계 : 프로젝트이름 작성
+	ㄴ 두번째 단계 : Add Folder 버튼 클릭해서 다음 2개 폴더를 만들기 => src/main/resources 와 src/test/java
+	ㄴ 세번째 단계 : web.xml 생성 체크하기
+
+2) Configure - Convert to Maven Project 
+
+3) webapp - WEB-INF 폴더 아래 views 폴더 만들기
+
+4) 환경설정 html, jsp 파일의 인코딩 UTF-8 로 바꾸기
+
+
+1) web.xml
+- ContextLoaderListener 설정 : 파라미터로 root-context.xml 파일 필요(db 연결동작)
+- frontcontroller 동작을 위한 설정 : 파라미터로 servlet-context.xml 파일 필요 (서블릿 관련 빈 정의)
+- 기타 : 필터
+* xml 파일이 저장된 폴더는 src/main/webapp/WEB-INF/
+
+2) jsp 파일이 있는 폴더 : /src/main/webapp/WEB-INF/view 폴더(views는 개발자가 만들었습니다.)
