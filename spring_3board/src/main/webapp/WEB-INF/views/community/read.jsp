@@ -59,6 +59,9 @@
 	</form>
 	</div>
 	<script type="text/javascript">
+	if('${message}'.length !=0)
+		alert('${message}');
+		
 		function execute(f){
 			let url
 			let message

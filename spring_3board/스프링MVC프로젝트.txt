@@ -39,3 +39,17 @@
 * xml 파일이 저장된 폴더는 src/main/webapp/WEB-INF/
 
 2) jsp 파일이 있는 폴더 : /src/main/webapp/WEB-INF/view 폴더(views는 개발자가 만들었습니다.)
+3) 파라미터 저장은 핸들러 메소드의 인자로 선언된 변수가 자동으로 한다.
+@RequestParam(defaultValue = "1") 은 파라미터의 초기값을 설정하는 형식이다.
+4) 파라미터로 받은 값이 다시 vuew 로 전달할 때에는 @ModelAttribute로 설정한다.
+5) 파라미터 개수가 많을 때, 그것들을 필드로 갖는 dto 또는 map 타입으로 선언하여 전달받는다.
+				ㄴ 파라미터의 name 속성과 일치하는 dto 필드만 매핑이 됩니다.(dto에 setter 필수!!)
+6) Post 요청을 처리한 후 다른 url 로 리다이렉트 할때에는 return "redorect:URL 주소"; 형식으로 한다.
+7) 6)번과 같이 리다이렉트 할떄 스프링의 특징 : RedirectAttributes 를 사용해서 리다이렉트 url에 파라미터를 지정
+
+* 보충 설명 : 
+		Model 객체의 addAttribute() 메소드는 
+		jsp에서 requesst.setAttribute 또는 session.setAttribute 와 같은 동작을 합니다.
+		RedirectAttributes 객체의 addAttribute()는 파라미터가 아닙니다.
+				입시 데이터 값을 저장하므로 url 에 표시 안합니다. (1회용)
+				addAttribute()는 redirect url에 파라미터를 설정하는 역할( -> Model 객체로 대처 가능)

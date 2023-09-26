@@ -1,6 +1,6 @@
 package org.iclass.mvc.dto;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,11 +18,11 @@ import lombok.ToString;
 
 public class CommunityComments {
 
-	private long idx;
+	private int idx;
 	private long mref;
 	private String wirter;
 	private String content;
-	private Timestamp createat;
+	private LocalDate createdat;
 	private String ip;
-	private int heart; 
+	private int commentCount;
 }

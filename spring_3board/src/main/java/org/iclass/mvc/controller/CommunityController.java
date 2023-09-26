@@ -3,14 +3,17 @@ package org.iclass.mvc.controller;
 import java.time.LocalDate;
 
 import org.iclass.mvc.dto.Community;
+import org.iclass.mvc.dto.CommunityComments;
 import org.iclass.mvc.service.CommunityService;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +38,6 @@ public class CommunityController {
 		model.addAttribute("list", service.pagelist(page).get("list"));
 		model.addAttribute("paging", service.pagelist(page).get("paging"));
 		model.addAttribute("today", LocalDate.now());
-		model.addAttribute("page",service.read(page).get(""));
 	}
 	
 	
@@ -44,6 +46,7 @@ public class CommunityController {
 			@ModelAttribute("page")	//파라미터로 받은 값을 model.addAttribute 와 같이 저장합니다.
 			int page,Model model) {
 		model.addAttribute("vo", service.read(idx));
+		//model.addAttribute("cmtlist", service.commentsList(idx));
 	}
 	
 	@GetMapping("/write")
@@ -52,25 +55,70 @@ public class CommunityController {
 	}
 	
 	@PostMapping("/write")
-	public String save(Community dto) {	//파라미터가 많을때, 그것들을 필드로 갖는 dto 또는 map
+	public String save(Community dto, RedirectAttributes reAttr
+			) {	//파라미터가 많을때, 그것들을 필드로 갖는 dto 또는 map
 		log.info("dto : {}", dto);
 		service.insert(dto);
 		
+		reAttr.addFlashAttribute("message", "글 등록이 완료되었습니다.");
 		return "redirect:/community/list";
 	}
 	// location.href = 'list.jsp' 는 자바스크립트 - 클라이언트 브라우저에서 주소 변경
 	// response.sendRedirect("list.jsp") 는 서버에서 클라이언트에게 새로 보낼 요청을 강제로
+
+	
+//	@GetMapping("/update")
+//	public void update(@ModelAttribute("page")int page,Model model) {
+//		model.addAttribute("vo", service.selectByIdx(idx));
+//	}
+	
+	
+	@PostMapping("/update")
+	public void update(long idx, @ModelAttribute("page") int page, Model model) {
+		model.addAttribute("vo", service.selectByIdx(idx));
+		//int page 는 @ModelAttribute 로 model.addAttribute("page",page) ; 를 대신해서
+		//  			update.jsp로 전달합니다.
+	}
+	
+	
 	//		ㄴ POST 요청을 처리한 후에는 redirect 를 합니다.
 	@PostMapping("/updateAction")
-	public String updateAc(@ModelAttribute("page") int page, Community dto) {
-		service.update(dto);
+	public String updateAc(int page, Community dto
+//			,Model model) {
+			, RedirectAttributes redirectAttributes) {
+			service.update(dto);
+			redirectAttributes.addAttribute("idx", dto.getIdx());
+			redirectAttributes.addAttribute("page", page);
+			redirectAttributes.addFlashAttribute("message", "글 수정이 완료되었습니다.");
+			return "redirect:/community/read";
+	}
+	
+	@PostMapping("/delete")
+	public String delete(@ModelAttribute("page")int page, Long idx,
+			RedirectAttributes reAttr) {
+				//파라미터가 많을때, 그것들을 필드로 갖는 dto 또는 map
+		service.delete(idx);
+		reAttr.addFlashAttribute("message", "글 삭제가 완료되었습니다.");
+		reAttr.addFlashAttribute("page", page);
+		
 		return "redirect:/community/list";
 	}
 	
-	@PostMapping("/update")
-	public void update(@ModelAttribute("page")int page,Model model long dto) {
-		model.addAttributes("vo", service.selectByIdx(dto));
-	}
 	
-	
+	  @PostMapping("/comments")
+	  public String comments(int page, int f,
+	  CommunityComments dto , RedirectAttributes redirectAttributes) {
+	  log.info(">>>>>>>>>>>>>>>>>>>>>> dto :{}",dto);
+	  service.comments(dto,f);
+	  redirectAttributes.addAttribute("page",page);
+	  redirectAttributes.addAttribute("idx",dto.getMref());
+	  String message = null;
+	  if(f==1) message ="댓글 등록 하였습니다.";
+	  else if(f==2) message = "댓글 삭제 하였습니다.";
+	  redirectAttributes.addFlashAttribute("message", message);
+	  
+//	  return "redirect:/community/read?page="+page +"&idx="+dto.getMref();
+	  return "redirect:/community/read"; //리다이렉트 애트리뷰트 사용하므로 쿼리스트링 안씁니다. }
+	  
+	  }
 }

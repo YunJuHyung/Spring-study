@@ -1,6 +1,7 @@
 package org.iclass.mvc.dto;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
